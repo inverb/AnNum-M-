@@ -1,0 +1,79 @@
+\documentclass[a4paper]{article}
+\usepackage[polish]{babel}
+\usepackage[T1]{fontenc}
+\usepackage[utf 8]{inputenc}
+\usepackage{amsmath, amsfonts}
+\usepackage{geometry}
+\usepackage{url}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1ex plus 2ex}
+\pagestyle{empty}
+\newgeometry{tmargin=2cm, bmargin=2cm, lmargin=2.9cm, rmargin=2cm}
+
+\begin{document}
+
+\begin{center}
+\Large
+Konspekt\\
+pracownia 1 zadanie 11\\
+
+\large
+Mateusz Basiak\\
+nr indeksu 300487\\
+\normalsize
+\end{center}
+\textbf{Opis}
+
+Moim celem będzie jak najdokładniejsze przybliżenie wartości funkcji sinus oraz cosinus. W tym celu posłużę się powszechnie znanymi wzorami obliczania tychże funkcji oraz ich drobnymi modyfikacjami, mającymi na celu minimalizację błędów numerycznych. Następnie porównam wyniki otrzymane dla różnych wzorów i różnych precyzji arytmetyki. Porównam je również z funkcjami bibliotecznymi, których użyję jako wartości dokładnych, które będę starał się przybliżać.\\\\
+Wartości funkcji będę obliczał dla różnych argumentów. Wśród punktów, dla których bedę wykonywał eksperyment znajdą się zarówno takie, w których funkcje przyjmują charakterystyczne wartości, jak i losowe punkty. Będą to $0$, $\frac{\pi}{2}$, $\frac{3\pi}{2}$, $-\frac{\pi}{2}$, losowy punkt z przedziału $(0,\frac{\pi}{2})$, oraz wartość argumentu znacznie większa od $2\pi$ \footnote{Oczywiście wszystkie argumenty podane są w radianach. Wartość $\pi$ mam zamiar wprowadzić ręcznie z dokładnością sięgającą setek cyfr dziesiętnych.}. \\
+
+\textbf{Wzory}\\
+
+\textbf{1. Wzór Taylora}$^{[1]}$
+
+\begin{center}
+\large
+$sin(x) = x - \frac{x^3}{3!} + \frac{x^5}{5!} - \frac{x^7}{7!} + \dots + (-1)^n\frac{x^{2n+1}}{(2n+1)!}$\footnote{Uznaję potęgowanie za dozwoloną mi operację, gdyż $x^3 = x \cdot x \cdot x$ i w kodzie programu będę posługiwał się wyłącznie operacją mnożenia.}\\
+$cos(x) = 1 - \frac{x^2}{2!} + \frac{x^4}{4!} - \frac{x^6}{6!} + \dots + (-1)^n\frac{x^{2n}}{(2n)!}$\\
+\end{center}
+Jako, że funkcja $n!$ rośnie bardzo szybko, kolejne elementy szeregu szybko stają się coraz mniej istotne. Wstępną hipotezą jest, że dla n=20 uzyskamy już przybliżenie wystarczające, by lepsze nie zmieniało wyniku nawet dla podwójnej precyzji, ale aby się upewnić wykonam odpowiednie obliczenia.\\
+Rozważmy następującą modyfikację powyższych wzorów:
+\begin{center}
+\large
+$sin(x) = x \Bigl(1 - \frac{x^2}{2 \cdot 3} \Bigl(1 - \frac{x^2}{4 \cdot 5}\Bigl( 1 - \frac{x^2}{6 \cdot 7} \Bigl( \dots \Bigl(1 - \frac{x^2}{(2n) \cdot (2n+1)} \Bigr)\dots \Bigr)$\\
+$cos(x) = 1 - \frac{x^2}{1 \cdot 2} \Bigl(1 - \frac{x^2}{3 \cdot 4}\Bigl(1 - \frac{x^2}{5 \cdot 6}\Bigl( \dots \Bigl(1 - \frac{x^2}{(2n-1) \cdot (2n)}\Bigr) \dots \Bigr)$\\
+\end{center}
+Oczywiście nadal są to te same wzory Taylora. Zmieniła się jednak liczba i kolejność operacji, jakie wykonuję, co może mieć znaczny wpływ na straty w dokładności, zwłaszcza dla dalekich elementów szeregu. Zbadam i przeanalizuję różnice w wynikach między wersjami tego wzoru.\\
+
+\textbf{2. Ułamki łańcuchowe}
+
+Funkcję sinus da się przedstawić w postaci ułamka łańcuchowego:$^{[2]}$
+\begin{center}
+\large
+$\sin x={\cfrac  {x}{1+{\cfrac  {x^{2}}{(2\cdot 3-x^{2})+{\cfrac  {2\cdot 3x^{2}}{(4\cdot 5-x^{2})+{\cfrac  {4\cdot 5x^{2}}{(6\cdot 7-x^{2})+\dots }}}}}}}}$
+\end{center}
+W związku z dużą liczbą dzieleń można postawić hipotezę, że nie jest to zbyt precyzyjna metoda. Hipotezę tą zweryfikuję ekperymentalnie. Wadą tego rozwiązania jest również fakt, że nie da się w ten sposób wyznaczyć wartości cosinusa.\\\\
+\newpage
+
+\textbf{3. Iloczyn nieskończony}
+
+Uzyskałem już sinus z sumy za pomocą szeregu Taylora. Mogę go również uzyskać za pomocą iloczynu:$^{[3]}$
+\begin{center}
+\large
+$\sin x=x\prod _{{k=1}}^{n}\left(1-{\tfrac  {x^{2}}{\pi ^{2}k^{2}}}\right)$\\
+$\cos x=\prod _{{k=1}}^{n}\left(1-{\tfrac  {x^{2}}{\pi ^{2}(k-{\frac  {1}{2}})^{2}}}\right)$
+\end{center}
+W tej funkcji wartość bezwzględna kolejnych składników maleje znacznie wolniej niż we wzorze Taylora, co oznacza że do uzyskania dobrego przybliżenia potrzebnych będzie więcej czynników. Wartość n przy której dalsze jego zwiększanie nie ma wpływu na dokładność wyniku również wyznaczę eksperymentalnie.\\\\
+Na koniec porównam wyniki otrzymanych pomiarów z wartościami funkcji $sin(x)$ i $cos(x)$ z biblioteki standardowej i omówię wyniki. Spróbuję też wyciągnąć wnioski co do optymalnego wyboru metody.\\\\\\
+
+\large
+\textbf{Bibliografia}
+
+\normalsize
+$[1]$ M. Paluszyński $"$Analiza Matematyczna dla informatyków. Notatki z wykładu$"$\\
+$[2]$ C. Olds $"$Continued Fractions$"$, wyd. 1963, str. 138\\
+$[3]$ Za Wikipedią: \url{https://pl.wikipedia.org/wiki/Funkcje_trygonometryczne#Definicja_za_pomoc%C4%85_iloczyn%C3%B3w_niesko%C5%84czonych}
+
+
+
+\end{document}
